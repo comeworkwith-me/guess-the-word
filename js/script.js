@@ -11,7 +11,8 @@ const guessMessages = document.querySelector(".message");
 const playAgain = document.querySelector(".play-again hide");
 
 // Instructions: Create a global variable titled Magnolia.
-const word = magnolia
+const word = magnolia;
+const guessLetter = [];
 
 // Instructions: Write a function to add placeholders for each letter.
 const placeholder = function (word) {
@@ -27,12 +28,36 @@ placeholder(word);
 
 
 // Instructions: Add an event listener to the guess button.
-// Instructions: In the callback function, add a parameter for the event: e.
-// Instructions: Prevent the default behavior of clicking a button, the form submitting, 
-// Instructions: and then reloading the page. Create and name a variable to capture the value of the input.
 guessButton.addEventListener("click", function (e) {
     e.preventDefault();
+    guessMessages.innerText = "";
     const guess = guessInputLetters.value;
-    console.log(guess);
+    const goodGuess = validate(guess);
+    if (goodGuess) {
+        makeGuess(guess);
+    }
     guessInputLetters.value = "";
 });
+
+//Instructions: Create a function to check player's input.
+const validate = function (input) {
+    const acceptedLetter = /[a-zA-Z]/
+    if (input.length ===0) {
+        guessMessages.innerText = "Please enter a letter.";
+    } else if (!input.match(acceptedLetter)) {
+        guessMessages.innerText = "Please enter a letter from A to Z.";
+    } else {
+        return input;
+    }
+};
+
+// Instructions: Create a function to capture input.
+const makeGuess = function (guess) {
+    guess = guess.toUpperCase();
+    if (guessLetter.includes(guess)) {
+        guessMessages.innerText = "You already guessed that letter,silly. Try again.";
+    } else {
+        guessLetter.push(guess);
+        console.log(guessLetter);
+    }
+};
