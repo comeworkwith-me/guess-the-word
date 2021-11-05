@@ -33,6 +33,7 @@ guessButton.addEventListener("click", function (e) {
     guessMessages.innerText = "";
     const guess = guessInputLetters.value;
     const goodGuess = validate(guess);
+
     if (goodGuess) {
         makeGuess(guess);
     }
@@ -44,6 +45,8 @@ const validate = function (input) {
     const acceptedLetter = /[a-zA-Z]/
     if (input.length ===0) {
         guessMessages.innerText = "Please enter a letter.";
+    } else if (input.length > 1) {
+        guessMessages.innerText = "Please enter a single letter.";
     } else if (!input.match(acceptedLetter)) {
         guessMessages.innerText = "Please enter a letter from A to Z.";
     } else {
@@ -59,5 +62,39 @@ const makeGuess = function (guess) {
     } else {
         guessLetter.push(guess);
         console.log(guessLetter);
+        madeGuesses();
+        wordInProgress(guessLetter);
+    }
+};
+
+const madeGuesses = function () {
+    guessedLetters.innerHTML = "";
+    for (const letter of guessLetter) {
+        const li = document.createElement("li");
+        li.innerText = letter;
+        guessedLetters.append(li);
+    }
+};
+
+const wordInProgress = function (guessLetter) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const revealWord = [];
+    for (const letter of wordArray) {
+        if (guessLetter.includes(letter)) {
+            revealWord.push(letter.toUpperCase());
+        } else {
+            revealWord.push("●");
+        }
+    }
+
+    wordProgress.innerText = revealWord.join("");
+    checkWin();
+};
+
+const checkWin = function () {
+    if (word.toUpperCase() === wordProgress.innerText) {
+        guessMessages.classList.add("win");
+        guessMessages.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
     }
 };
