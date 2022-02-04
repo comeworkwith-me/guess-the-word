@@ -12,7 +12,7 @@ const playAgain = document.querySelector(".play-again");
 
 // Instructions: Create global variables to managage words and guesses.
 let word = "magnolia";
-const guessedLetter = [];
+let guessedLetter = [];
 let remainingGuess = 8;
 
 
@@ -120,6 +120,7 @@ const updateRemainingGuesses = function (guess) {
 
     if (remainingGuess === 0) {
         guessMessages.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
+        startOver();
     } else if(remainingGuess === 1) {
         remainingGuessSpan.innerText = `${remainingGuess} guess`;
     } else {
@@ -133,5 +134,30 @@ const checkWin = function () {
     if (word.toUpperCase() === wordProgress.innerText) {
         guessMessages.classList.add("win");
         guessMessages.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+
+        startOver();
     }
 };
+
+// Instructions: Create a function to hide and show elements.
+const startOver = function () {
+    guessButton.classList.add("hide");
+    remainingGuesses.classList.add("hide");
+    guessedLetters.classList.add("hide");
+    playAgain.classList.remove("hide");
+};
+
+playAgain.addEventListener("click", function () {
+    guessMessages.classList.remove("win");
+    guessedLetter = [];
+    remainingGuess = 8;
+    remainingGuessSpan.innerText = `${remainingGuess} guesses`;
+    guessedLetters.innerHTML = "";
+    guessMessages.innerText = "";
+    getWord();
+
+    guessButton.classList.remove("hide");
+    playAgain.classList.add("hide");
+    remainingGuesses.classList.remove("hide");
+    guessedLetters.classList.remove("hide");
+});
